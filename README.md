@@ -1,5 +1,7 @@
 # I_GO
 의료진, 환자 간 위치 파악 시스템
-![Group 1 (4)](https://user-images.githubusercontent.com/84652886/181709025-29a38421-b5c4-46ac-8343-3e35ef33b1a1.png)
-![Group 2 (6)](https://user-images.githubusercontent.com/84652886/181709529-eadd5f89-69f3-4bb4-a95d-158d4d4e2a6c.png)
-![Group 3](https://user-images.githubusercontent.com/84652886/181709722-d33a7098-dc26-403b-8df4-754fd3e3c8c4.png)
+
+![Group 19](https://user-images.githubusercontent.com/84652886/191816232-c3e75e8c-e95d-45b7-81c8-51f2e111bf0f.png)
+![Group 16](https://user-images.githubusercontent.com/84652886/191816211-eeedfe41-c119-44b3-af93-975e4299c4f2.png)
+![Group 20](https://user-images.githubusercontent.com/84652886/191816240-d3d47672-7f1a-47f7-9a9d-4610d058ea0c.png)
+![Group 21](https://user-images.githubusercontent.com/84652886/191816243-cf0f0ba9-af59-4574-a9d1-c2c136cd86a5.png)
