@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
@@ -23,6 +24,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.i_go.R
 import com.example.i_go.feature_note.domain.util.log
+import com.example.i_go.feature_note.presentation.add_edit_patient.AddEditPatientEvent
+import com.example.i_go.feature_note.presentation.add_edit_patient.Gender
 import com.example.i_go.feature_note.presentation.login.components.CustomText
 import com.example.i_go.feature_note.presentation.util.ExceptionMessage
 import com.example.i_go.feature_note.presentation.util.Screen
@@ -50,6 +53,7 @@ fun LoginScreen(
     var isMaxSize by remember { mutableStateOf(false) }
     val state = rememberCollapsingToolbarScaffoldState()
 
+    var isAgree by remember { mutableStateOf(false) }
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
@@ -250,8 +254,25 @@ fun LoginScreen(
                                 isPassword = true,
                                 alertMessage = "패스워드1과 동일해야 함"
                             )
+                            Row (
+                                modifier = Modifier.align(CenterHorizontally).clickable{navController.navigate(Screen.AgreeScreen.route)},
+                            ){
+                                RadioButton(
+                                    onClick = { isAgree = true },
+                                    selected = isAgree,
+                                    colors = RadioButtonDefaults.colors(
+                                        selectedColor = call_color,
+                                        unselectedColor = call_color
+                                    )
+                                )
+                                Text(
+                                    text = "개인 정보 수집 처리 동의",
+                                    color = text_gray,
+                                    modifier = Modifier.align(Alignment.CenterVertically)
+                                )
+                            }
                         }
-                        Spacer(modifier = Modifier.padding(30.dp))
+                        Spacer(modifier = Modifier.padding(20.dp))
                         Button(
                             onClick = {
                                 scope.launch {
@@ -282,7 +303,11 @@ fun LoginScreen(
                                                 viewModel2.signIn.value.password2,
                                                 scaffoldState
                                             )
-                                        } else viewModel2.onEvent(SignInEvent.SignIn, scaffoldState)
+                                        }
+                                        else if (!isAgree){
+                                            ExceptionMessage("", "개인정보 동의를 완료해주세요", scaffoldState)
+                                        }
+                                        else viewModel2.onEvent(SignInEvent.SignIn, scaffoldState)
                                     } else {
                                         if (viewModel.emailPw.value.username.isEmpty())
                                             ExceptionMessage(viewModel.emailPw.value.username, "아이디를 입력해주세요.", scaffoldState)
