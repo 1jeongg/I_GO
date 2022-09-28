@@ -16,6 +16,7 @@ import com.example.i_go.feature_note.presentation.SplashScreen
 import com.example.i_go.feature_note.presentation.add_edit_patient.AddEditPatientScreen
 import com.example.i_go.feature_note.presentation.alarms.AlarmScreen
 import com.example.i_go.feature_note.presentation.doctors.DoctorScreen
+import com.example.i_go.feature_note.presentation.login.AgreeScreen
 import com.example.i_go.feature_note.presentation.login.LoginScreen
 import com.example.i_go.feature_note.presentation.patients.PatientsScreen
 import com.example.i_go.feature_note.presentation.util.Screen
@@ -61,6 +62,9 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(route = Screen.AlarmScreen.route){
                             AlarmScreen(navController = navController)
+                        }
+                        composable(route=  Screen.AgreeScreen.route){
+                            AgreeScreen(navController = navController)
                         }
                         composable(
                             route = Screen.AddEditPatientScreen.route +
