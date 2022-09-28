@@ -15,3 +15,7 @@
 local.properties
 
 .idea/deploymentTargetDropDown.xml
+
+app/release/app-release.aab
+
+private_key.pepk

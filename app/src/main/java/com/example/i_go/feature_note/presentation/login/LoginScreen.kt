@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Alignment.Companion.Center
@@ -49,11 +50,11 @@ fun LoginScreen(
     var scope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
 
-    var isLogIn by remember { mutableStateOf(true) }
-    var isMaxSize by remember { mutableStateOf(false) }
+    var isLogIn by rememberSaveable { mutableStateOf(true) }
+    var isMaxSize by rememberSaveable { mutableStateOf(false) }
     val state = rememberCollapsingToolbarScaffoldState()
 
-    var isAgree by remember { mutableStateOf(false) }
+    var isAgree by rememberSaveable { mutableStateOf(false) }
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
@@ -255,10 +256,10 @@ fun LoginScreen(
                                 alertMessage = "패스워드1과 동일해야 함"
                             )
                             Row (
-                                modifier = Modifier.align(CenterHorizontally).clickable{navController.navigate(Screen.AgreeScreen.route)},
+                                modifier = Modifier.align(CenterHorizontally),
                             ){
                                 RadioButton(
-                                    onClick = { isAgree = true },
+                                    onClick = { isAgree = !isAgree },
                                     selected = isAgree,
                                     colors = RadioButtonDefaults.colors(
                                         selectedColor = call_color,
@@ -268,7 +269,9 @@ fun LoginScreen(
                                 Text(
                                     text = "개인 정보 수집 처리 동의",
                                     color = text_gray,
-                                    modifier = Modifier.align(Alignment.CenterVertically)
+                                    modifier = Modifier
+                                        .align(Alignment.CenterVertically)
+                                        .clickable { navController.navigate(Screen.AgreeScreen.route) }
                                 )
                             }
                         }
@@ -332,7 +335,7 @@ fun LoginScreen(
                             )
                         }
                         Text(
-                            text = if (isLogIn) "회원가입하기" else "로그인하기",
+                            text = if (isLogIn) "회원가입 하러 가기" else "로그인 하러 가기",
                             style = MaterialTheme.typography.body1,
                             color = primary,
                             modifier = Modifier
