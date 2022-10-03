@@ -1,9 +1,6 @@
 package com.igoapp.i_go.feature_note.presentation.add_edit_patient
 
-import android.content.Context
-import android.content.SharedPreferences
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,14 +14,12 @@ import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.clipPath
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -40,7 +35,6 @@ import androidx.navigation.NavController
 import com.igoapp.i_go.feature_note.data.remote.responseDTO.PatientByIdDTO
 import com.igoapp.i_go.feature_note.data.remote.responseDTO.PatientByIdDTO.Companion.patient_image_real
 import com.igoapp.i_go.feature_note.data.storage.idStore
-import com.igoapp.i_go.feature_note.domain.util.log
 import com.igoapp.i_go.feature_note.presentation.add_edit_patient.components.PatientMap
 import com.igoapp.i_go.feature_note.presentation.add_edit_patient.components.TransparentHintTextField
 import com.igoapp.i_go.feature_note.presentation.doctors.MakeRectangular
@@ -52,7 +46,6 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -78,7 +71,6 @@ fun AddEditPatientScreen(
     val focusRequester by remember { mutableStateOf(FocusRequester()) }
     val focusManager = LocalFocusManager.current
 
-    patientImage.toString().log()
     val pagerState = rememberPagerState(
         pageCount = 5,
         initialPage = if (patientImage > 0) patientImage-1 else PatientByIdDTO.patientImages.random()
@@ -103,13 +95,11 @@ fun AddEditPatientScreen(
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is AddEditPatientViewModel.UiEvent.SavePatient -> {
-                    "HI sucess".log()
                     navController.navigate(Screen.PatientsScreen.route){
                         popUpTo(0)
                     }
                 }
                 is AddEditPatientViewModel.UiEvent.ShowSnackbar -> {
-                    "this come fail".log()
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = "환자 저장 실패"
                     )

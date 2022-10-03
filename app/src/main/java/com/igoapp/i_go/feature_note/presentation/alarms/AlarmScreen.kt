@@ -14,11 +14,9 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.igoapp.i_go.feature_note.domain.util.log
 import com.igoapp.i_go.feature_note.presentation.alarms.component.AlarmItem
 import com.igoapp.i_go.feature_note.presentation.util.Screen
 import com.igoapp.i_go.ui.theme.primary
@@ -60,7 +58,7 @@ fun AlarmScreen(
             contentPadding = PaddingValues(16.dp)
         ) {
             items(state.notifications) { notification ->
-                "알림창에서 ${notification.patient_id} ${notification.image}".log()
+                // "알림창에서 ${notification.patient_id} ${notification.image}".log()
                 AlarmItem(
                     image = notification.image - 1,
                     name = notification.name,
@@ -70,7 +68,6 @@ fun AlarmScreen(
                                 "&patientImage=${notification.image}")
                     },
                     onCallClick = {
-                        "patient id is ${notification.patient_id}".log()
                         viewModel.callPatients(notification.patient_id)
                     },
                     onDeleteClick = {

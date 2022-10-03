@@ -27,7 +27,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-   // @ExperimentalAnimationApi
     @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,11 +36,8 @@ class MainActivity : ComponentActivity() {
 
        setContent {
             I_GOTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
-                    //modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
-
                 ) {
                     val navController = rememberNavController()
                     NavHost(

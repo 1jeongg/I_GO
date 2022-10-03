@@ -112,20 +112,15 @@ class AddEditPatientViewModel @Inject constructor (
                 is Resource.Error -> {
                     _state.value =
                         PatientState(error = patient.message ?: "An unexpected error occured")
-                    Log.d("test", "error")
                 }
                 is Resource.Loading -> {
                     _state.value = PatientState(isLoading = true)
-                    Log.d("test", "loading")
-
                 }
             }
         }.launchIn(viewModelScope)
     }
 
     private suspend fun addPatient(){
-        "Hello".log()
-        doctorId.value.toString().log()
         patientUseCases.addPatient(
             doctorId.value,
             PatientDTO(
@@ -141,21 +136,20 @@ class AddEditPatientViewModel @Inject constructor (
         ).collectLatest {
             when (it){
                 is Resource.Success -> {
-                    "HIHI".log()
+                   "환자 정보 add 성공".log()
                     _eventFlow.emit(UiEvent.SavePatient)
                 }
                 is Resource.Error -> {
-                    "환자 정보 저장 중 에러 발생 1".log()
+                    "환자 정보 add 중 에러 발생".log()
                     _eventFlow.emit(UiEvent.ShowSnackbar("cannot save"))
                 }
                 is Resource.Loading -> {
-                    "환자 정보 값 가져오는 중...".log()
+                    "환자 정보 add 중...".log()
                 }
             }
         }
     }
     private suspend fun putPatient(){
-        "THis is new thing".log()
         patientUseCases.putPatient(
             doctorId.value,
             patientId.value,
@@ -172,15 +166,15 @@ class AddEditPatientViewModel @Inject constructor (
         ).collectLatest {
             when (it){
                 is Resource.Success -> {
-                    "HIHI2".log()
+                     "환자 정보 put 성공".log()
                     _eventFlow.emit(UiEvent.SavePatient)
                 }
                 is Resource.Error -> {
-                    "환자 정보 저장 중 에러 발생 1".log()
+                    "환자 정보 put 중 에러 발생".log()
                     _eventFlow.emit(UiEvent.ShowSnackbar("cannot save"))
                 }
                 is Resource.Loading -> {
-                    "환자 정보 값 가져오는 중...".log()
+                    "환자 정보 put 중...".log()
                 }
             }
         }

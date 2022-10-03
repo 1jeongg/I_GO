@@ -76,7 +76,6 @@ fun DoctorScreen (
 
     "This is FCM_TOKEN: ${FCM_TOKEN.getString("FCM_TOKEN", "").toString()}".log()
 
-
     val userIdKey = stringPreferencesKey("user")
     var userId = flow<String> {
 
@@ -97,7 +96,6 @@ fun DoctorScreen (
         doctorViewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is DoctorViewModel.UiEvent.SaveDoctor -> {
-               //     scaffoldState.snackbarHostState.showSnackbar("의료진 저장")
                     "의료진 SUCCESS!!".log()
                     navController.navigate(Screen.PatientsScreen.route)
                 }

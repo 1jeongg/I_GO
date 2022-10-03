@@ -37,7 +37,7 @@ class SignInViewModel @Inject constructor(
                     _eventFlow.emit(UiEvent.SignIn)
                 }
                 is Resource.Error -> {
-                    "회원가입 중 에러 발생2".log()
+                    "회원가입 중 에러 발생 in SignInViewModel".log()
                      scaffoldState.snackbarHostState.showSnackbar("회원가입 정보를 다시 확인해주세요.")
                     _eventFlow.emit(UiEvent.Error(it.message.toString()))
                 }
@@ -75,7 +75,6 @@ class SignInViewModel @Inject constructor(
                     try {
                         signIn(scaffoldState = scaffoldState)
                     } catch (e: Exception) {
-                        "회원가입 중 에러 발생ㅇ".log()
                         _eventFlow.emit(UiEvent.Error(message = "회원가입 중 에러 발생"))
                     }
                 }

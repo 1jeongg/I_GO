@@ -11,22 +11,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
-import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.igoapp.i_go.R
 import com.igoapp.i_go.feature_note.domain.util.log
-import com.igoapp.i_go.feature_note.presentation.add_edit_patient.AddEditPatientEvent
-import com.igoapp.i_go.feature_note.presentation.add_edit_patient.Gender
 import com.igoapp.i_go.feature_note.presentation.login.components.CustomText
 import com.igoapp.i_go.feature_note.presentation.util.ExceptionMessage
 import com.igoapp.i_go.feature_note.presentation.util.Screen
@@ -58,26 +54,24 @@ fun LoginScreen(
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
+                is LoginViewModel.UiEvent.Login -> {
+                    "LOGIN SUCCESS!!".log()
+                    navController.navigate(Screen.DoctorScreen.route)
+                }
                 is LoginViewModel.UiEvent.Error -> {
                     scaffoldState.snackbarHostState.showSnackbar("로그인 실패")
                     "LOGIN ERROR!!".log()
-                }
-                is LoginViewModel.UiEvent.Login -> {
-                    "LOGIN SUCCESS!!".log()
-                    //    scaffoldState.snackbarHostState.showSnackbar("로그인 성공")
-                    navController.navigate(Screen.DoctorScreen.route)
                 }
             }
         }
         viewModel2.eventFlow.collectLatest { event ->
             when (event) {
+                is SignInViewModel.UiEvent.SignIn -> {
+                    "SignIn Success!!".log()
+                }
                 is SignInViewModel.UiEvent.Error -> {
                     scaffoldState.snackbarHostState.showSnackbar("회원가입 실패")
                     "SignIn ERROR!!".log()
-                }
-                is SignInViewModel.UiEvent.SignIn -> {
-                    "SignIn Success!!".log()
-                    //     scaffoldState.snackbarHostState.showSnackbar("회원가입 성공")
                 }
             }
         }

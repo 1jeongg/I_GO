@@ -1,20 +1,14 @@
 package com.igoapp.i_go.feature_note.presentation.doctors
 
-import android.content.Context
-import android.content.SharedPreferences
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.igoapp.i_go.feature_note.data.remote.requestDTO.UserDTO
-import com.igoapp.i_go.feature_note.data.remote.responseDTO.UserResponseDTO
 import com.igoapp.i_go.feature_note.domain.model.ID
 import com.igoapp.i_go.feature_note.domain.use_case.user.UserUseCases
 import com.igoapp.i_go.feature_note.domain.util.Resource
 import com.igoapp.i_go.feature_note.domain.util.log
-import com.igoapp.i_go.feature_note.presentation.login.LoginViewModel
-import com.igoapp.i_go.feature_note.presentation.patients.PatientsState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -56,8 +50,6 @@ class DoctorViewModel @Inject constructor(
                     id.value.userId = user_id
                     id.value.hospitalId = it.data!!.hospital
                     userUseCases.setId(id.value)
-                    "확인 ${id.value} and ${user.value}".log()
-                    "토큰 여기 ${user.value.token}".log()
                     _eventFlow.emit(UiEvent.SaveDoctor)
                 }
                 is Resource.Error -> {
@@ -81,11 +73,10 @@ class DoctorViewModel @Inject constructor(
                         hospital = it.data.hospital?.id!!
                     )
                     "${_user.value}".log()
-                    "의료진 get 성공".log()
                 }
                 is Resource.Error -> {
-                    _state.value = DoctorState(error = "의료진 겟 에러")
-                    "의료진 get 성공".log()
+                    _state.value = DoctorState(error = "doctor get error")
+                    "의료진 get 에러".log()
                 }
                 is Resource.Loading -> {
                     _state.value = DoctorState(isLoading = true)
@@ -96,7 +87,6 @@ class DoctorViewModel @Inject constructor(
     }
 
     fun setFCMToken(token: String){
-        "FCM 토큰 ${token}".log()
         _user.value = user.value.copy(
             token = token
         )
@@ -126,7 +116,6 @@ class DoctorViewModel @Inject constructor(
                             || user.value.hospital == 0
                         ) {
                             _eventFlow.emit(UiEvent.ShowSnackbar("모든 칸의 내용을 채워주세요"))
-                            "ERROR 입력 되지 않은 칸이 존재".log()
                             return@launch
                         }
                         putUserInfo(doctor_id)

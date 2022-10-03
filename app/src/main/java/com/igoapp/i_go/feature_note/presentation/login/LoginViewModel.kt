@@ -6,7 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.igoapp.i_go.feature_note.data.remote.requestDTO.LoginPasswordDTO
-import com.igoapp.i_go.feature_note.data.remote.requestDTO.UserDTO
 import com.igoapp.i_go.feature_note.domain.model.ID
 import com.igoapp.i_go.feature_note.domain.model.Token
 import com.igoapp.i_go.feature_note.domain.use_case.user.UserUseCases
@@ -36,8 +35,6 @@ class LoginViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             getUserToken()
-            "LoginViewModel init에서 확인한 토큰값 : ${token.value.value}".log()
-            "LoginViewModel init에서 확인한 id값 : ${token.value.id}".log()
             if (!token.value.value.isNullOrBlank()) {
                 userUseCases.setToken(token.value)
                 _eventFlow.emit(UiEvent.Login)
@@ -53,12 +50,8 @@ class LoginViewModel @Inject constructor(
                 is Resource.Success -> {
                     token.value = it.data!!
                     userUseCases.setToken(token.value)
-                    "LoginViewModel에서 확인한 토큰값 : ${it.data!!.value}".log()
-                    "LoginViewModel에서 확인한 id값 : ${token.value.id}".log()
                     id.value.userId = it.data.id
                     userUseCases.setId(id.value)
-                    "LoginViewModel에서 확인한 id값2 : ${id.value}".log()
-                    "LoginViewModel에서 확인한 id값3 : ${id.value.userId}".log()
                     _eventFlow.emit(UiEvent.Login)
                 }
                 is Resource.Error -> {
@@ -67,7 +60,7 @@ class LoginViewModel @Inject constructor(
                     _eventFlow.emit(UiEvent.Error("cannot login"))
                 }
                 is Resource.Loading -> {
-                    "토큰 값 가져오는 중...".log()
+                //     "토큰 값 가져오는 중...".log()
                 }
             }
         }
@@ -101,10 +94,9 @@ class LoginViewModel @Inject constructor(
                             _eventFlow.emit(UiEvent.Error(message = "모든 칸의 내용을 채워주세요"))
                             return@launch
                         }
-                        "Hello this is login".log()
                         login(scaffoldState)
                     } catch (e: Exception) {
-                        "로그인 중 에러 발생 2".log()
+                        "로그인 중 에러 발생".log()
                         scaffoldState.snackbarHostState.showSnackbar("로그인 실패")
                         _eventFlow.emit(UiEvent.Error(message = "로그인 중 에러 발생"))
                     }

@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.igoapp.i_go.feature_note.domain.model.Notification
 import com.igoapp.i_go.feature_note.domain.use_case.notification.NotificationUseCases
 import com.igoapp.i_go.feature_note.domain.use_case.patient.PatientUseCases
-import com.igoapp.i_go.feature_note.domain.use_case.user.UserUseCases
 import com.igoapp.i_go.feature_note.domain.util.log
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -60,7 +59,6 @@ class AlarmViewModel @Inject constructor(
                         name = patient_name
                     )
                 )
-                "노트앱은 ${patient_id}".log()
             } catch(e: Exception) {
                 "푸시 알림 저장 실패".log()
             }
@@ -69,7 +67,6 @@ class AlarmViewModel @Inject constructor(
 
     fun callPatients(patient_id: Int){
             try {
-                "푸시 알림 호출 ㄱㄱ".log()
                 patientUseCases.callPatient(patient_id = patient_id).launchIn(viewModelScope)
             } catch(e: Exception){
                 "푸시 알림에서 호출 실패".log()

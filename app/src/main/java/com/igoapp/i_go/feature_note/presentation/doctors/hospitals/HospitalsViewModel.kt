@@ -28,8 +28,7 @@ class HospitalsViewModel @Inject constructor(
             getHospitalsUseCase().collect() {
                 when (it) {
                     is Resource.Success -> {
-                        _state.value =
-                            it.data?.let { HospitalsState(hospitalDTOs = it) }!!
+                        _state.value = it.data?.let { HospitalsState(hospitalDTOs = it) }!!
                         "병원 목록 가져오기 성공".log()
                     }
                     is Resource.Error -> "병원 목록 가져오기 실패".log()

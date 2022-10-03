@@ -26,7 +26,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -55,10 +54,8 @@ fun PatientsScreen(
     viewModel: PatientsViewModel = hiltViewModel(),
     notificationViewModel: AlarmViewModel = hiltViewModel(),
 ) {
-    val state = viewModel.state.value
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
-    val scrollState = rememberScrollState()
     var context = LocalContext.current
 
     val nameKey = stringPreferencesKey("user")
@@ -73,7 +70,6 @@ fun PatientsScreen(
         }
     }.collectAsState(initial = "")
 
-    "Name is ${name.value}".log()
     val ID_FCM: SharedPreferences =
         context.getSharedPreferences("ID_FCM", Context.MODE_PRIVATE)
 
@@ -88,9 +84,6 @@ fun PatientsScreen(
 
     val NAME_FCM: SharedPreferences =
         context.getSharedPreferences("NAME_FCM", Context.MODE_PRIVATE)
-
-    "This is pref1: ${ID_FCM.getString("ID_FCM", "").toString()}".log()
-    "This is pref2: ${IMAGE_FCM.getString("IMAGE_FCM", "").toString()}".log()
 
     if (!ID_FCM.getString("ID_FCM", "").isNullOrBlank()){
         navController.navigate(Screen.AddEditPatientScreen.route +
@@ -265,7 +258,6 @@ fun PatientsScreen(
                                         actionLabel = "취소하기"
                                     )
                                     if (result == SnackbarResult.ActionPerformed) {
-                                        "취소 버튼 누름".log()
                                         viewModel.onEvent(
                                             PatientsEvent.RestorePatients,
                                             doctor_id = name.value.toInt(),
@@ -283,7 +275,6 @@ fun PatientsScreen(
                                 try {
                                     OpenUrl("http://" + it.ip_address!! + "/gpio/1")
                                 } catch(e: Exception){
-                                    "url 오픈 실패".log()
                                 }
                             }
                         )
@@ -340,7 +331,6 @@ fun OpenUrl(myurl: String = "http://google.com") {
                 val data = buffered.readLine() ?: break
                 content.append(data)
             }
-            "URL이 열렸어요 {}{}{}{}{{}{}{}}{}{}{}{}{}}}".log()
             buffered.close()
             huc.disconnect()
         }
