@@ -14,6 +14,7 @@ data class PatientByIdDTO(
     val disease: String? = null,
     val extra: String? = null,
     val image: Int? = null,
+    val ip_address: String? = null
 ) {
     companion object {
         val patientImages = listOf(0,1,2,3,4)

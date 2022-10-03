@@ -1,19 +1,20 @@
 package com.igoapp.i_go.feature_note.presentation.patients
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
+import android.os.AsyncTask
 import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -23,30 +24,29 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.font.FontWeight.Companion.Bold
-import androidx.compose.ui.text.font.FontWeight.Companion.Normal
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.datastore.preferences.core.edit
+import androidx.core.content.ContextCompat.startActivity
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.igoapp.i_go.R
 import com.igoapp.i_go.feature_note.data.remote.responseDTO.PatientByIdDTO
 import com.igoapp.i_go.feature_note.data.remote.responseDTO.PatientDTO
-import com.igoapp.i_go.feature_note.data.storage.dataStore
 import com.igoapp.i_go.feature_note.data.storage.idStore
-import com.igoapp.i_go.feature_note.domain.repository.UserRepository
 import com.igoapp.i_go.feature_note.domain.util.log
 import com.igoapp.i_go.feature_note.presentation.alarms.AlarmViewModel
 import com.igoapp.i_go.feature_note.presentation.patients.components.PatientItem
 import com.igoapp.i_go.feature_note.presentation.util.Screen
 import com.igoapp.i_go.ui.theme.*
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
+import kotlin.concurrent.thread
 
 @ExperimentalAnimationApi
 @Composable
@@ -95,9 +95,7 @@ fun PatientsScreen(
     if (!ID_FCM.getString("ID_FCM", "").isNullOrBlank()){
         navController.navigate(Screen.AddEditPatientScreen.route +
                 "?patientId=${ID_FCM.getString("ID_FCM", "")}" +
-                "&patientImage=${IMAGE_FCM.getString("IMAGE_FCM", "")}") {
-            popUpTo(0)
-        }
+                "&patientImage=${IMAGE_FCM.getString("IMAGE_FCM", "")}")
         notificationViewModel.addNotification(
             patient_id = ID_FCM.getString("ID_FCM", "")!!.toInt(),
             patient_image = IMAGE_FCM.getString("IMAGE_FCM", "")!!.toInt(),
@@ -206,12 +204,15 @@ fun PatientsScreen(
                             Button(
                                 modifier = Modifier.align(Center),
                                 onClick = {
+                                    //OpenWebPage(context).execute("http://google.com")
+
                                     viewModel.onEvent(
                                         PatientsEvent.CallPatient,
                                         doctor_id = name.value.toInt(),
                                         patient_id = patientId,
                                     )
                                     openDialog.value = false
+
                                 },
                                 colors = ButtonDefaults.buttonColors(backgroundColor = call_color)
                             ) {
@@ -279,6 +280,11 @@ fun PatientsScreen(
                                 openDialog.value = true
                                 patientId = it.id!!
                                 patientName = it.name
+                                try {
+                                    OpenUrl("http://" + it.ip_address!! + "/gpio/1")
+                                } catch(e: Exception){
+                                    "url 오픈 실패".log()
+                                }
                             }
                         )
                     }
@@ -310,7 +316,36 @@ fun PatientsScreen(
         }
     }
 }
+class OpenWebPage(var context: Context) : AsyncTask<String, Void, Void>() {
+    override fun doInBackground(vararg params: String?): Void? {
+     //   val url = params.get(0)
+        val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://google.com"))
+        context.startActivity(webIntent)
+        return null
+    }
+}
+fun OpenUrl(myurl: String = "http://google.com") {
+    thread(start = true) {
+        val url = URL(myurl)
 
+        val huc = url.openConnection() as HttpURLConnection
+        huc.requestMethod = "GET"
+
+        if (huc.responseCode == HttpURLConnection.HTTP_OK) {
+            val streamReader = InputStreamReader(huc.inputStream)
+            val buffered = BufferedReader(streamReader)
+
+            val content = StringBuilder()
+            while (true) {
+                val data = buffered.readLine() ?: break
+                content.append(data)
+            }
+            "URL이 열렸어요 {}{}{}{}{{}{}{}}{}{}{}{}{}}}".log()
+            buffered.close()
+            huc.disconnect()
+        }
+    }
+}
 fun MappingPatient(patientById: PatientByIdDTO)
 : PatientDTO {
     val patient = PatientDTO(

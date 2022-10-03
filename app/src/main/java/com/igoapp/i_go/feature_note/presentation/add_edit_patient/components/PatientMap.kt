@@ -16,11 +16,9 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
 import com.igoapp.i_go.feature_note.data.storage.idStore
-import com.igoapp.i_go.feature_note.domain.util.log
 import com.igoapp.i_go.feature_note.presentation.doctors.hospitals.HospitalViewModel
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import java.io.IOException
 
 @Composable
 fun PatientMap (
@@ -54,9 +52,6 @@ fun PatientMap (
 
     val x_fcm = X_FCM.getString("X_FCM", "").toString()
     val y_fcm = Y_FCM.getString("Y_FCM", "").toString()
-    "fcm data on Screen - id: ${ID_FCM.getString("ID_FCM", "").toString()}".log()
-    "fcm data on Screen - x : $x_fcm".log()
-    "fcm data on Screen - y : $y_fcm".log()
 
     if (ID_FCM.getString("ID_FCM", "").toString().isNotBlank()) {
         patientId.value = ID_FCM.getString("ID_FCM", "")!!.toInt()
@@ -103,14 +98,6 @@ fun PatientMap (
             painter = painter,
             contentDescription = "hospital",
         )
-
-        // x의 범위: 0에서 682, y 범위: 0에서 484.5 사이
-        /*
-        MakeCircle(imageWidth = drawing_x.value, imageHeight = drawing_y.value, x = station_x_1.value, y = station_y_1.value)
-        MakeCircle(imageWidth = drawing_x.value, imageHeight = drawing_y.value, x = station_x_2.value, y = station_y_2.value)
-        MakeCircle(imageWidth = drawing_x.value, imageHeight = drawing_y.value, x = station_x_3.value, y = station_y_3.value)
-        MakeCircle(imageWidth = drawing_x.value, imageHeight = drawing_y.value, x = station_x_4.value, y = station_y_4.value)
-        */
 
         PatientCircle(
             imageWidth = drawing_x.value,
