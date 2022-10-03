@@ -1,6 +1,5 @@
 package com.igoapp.i_go.feature_note.domain.use_case.patient
 
-import android.util.Log
 import com.igoapp.i_go.feature_note.data.remote.responseDTO.PatientByIdDTO
 import com.igoapp.i_go.feature_note.domain.repository.PatientRepository
 import com.igoapp.i_go.feature_note.domain.util.Resource
@@ -19,20 +18,13 @@ class GetPatientById @Inject constructor(
             emit(Resource.Loading())
             val r = repository.getPatientById(doctor_id, patient_id)
             when(r.code()) {
-                200 -> {
-                    Log.d("test", r.body()!!.toString())
-                    emit(Resource.Success(r.body()!!))
-                }
-                else -> {
-                    Log.d("test", "usecase ERROR ${r.code()}: ${r.errorBody().toString()}")
-                }
+                200 -> emit(Resource.Success(r.body()!!))
+                else -> emit(Resource.Error("[GetPatientById] Error caused."))
             }
 
         } catch(e: HttpException) {
-            Log.d("qwer", "An unexpected error occured")
             emit(Resource.Error(e.localizedMessage ?: "An unexpected error occured"))
         } catch(e: IOException) {
-            Log.d("qwer", "Couldn't reach server. Check your internet connection.")
             emit(Resource.Error("Couldn't reach server. Check your internet connection."))
         }
     }

@@ -1,12 +1,7 @@
 package com.igoapp.i_go.feature_note.firebase
 
-import android.R
-import android.app.Notification
 import android.content.Context
 import android.content.Intent
-import android.util.Log
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.igoapp.i_go.MainActivity
@@ -26,11 +21,6 @@ class TechFirebaseMessageService : FirebaseMessagingService() {
         super.onMessageReceived(message)
 
         if (message.data.isNotEmpty()){
-            "Message Data - x     ${message.data["x"]}".log()
-            "Message Data - y     ${message.data["y"]}".log()
-            "Message Data - id    ${message.data["id"]}".log()
-            "Message Data - image ${message.data["image"]}".log()
-            "Message Data - name  ${message.data["name"]}".log()
 
             val X_FCM = getSharedPreferences("X_FCM", Context.MODE_PRIVATE)
             var editor = X_FCM.edit()
@@ -54,12 +44,11 @@ class TechFirebaseMessageService : FirebaseMessagingService() {
 
             val NAME_FCM = getSharedPreferences("NAME_FCM", Context.MODE_PRIVATE)
             editor = NAME_FCM.edit()
-            editor.putString("NAME_FCM", if (message.data["name"]!!.isNotEmpty()) message.data["name"] else "안녕" )
+            editor.putString("NAME_FCM", if (message.data["name"]!!.isNotEmpty()) message.data["name"] else "이름" )
             editor.apply()
         }
 
         if (message.notification != null) {
-            "작업표시줄 내용: ${message.notification!!.title} ${message.notification!!.body}".log()
             val intent = Intent(applicationContext, MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
@@ -67,14 +56,11 @@ class TechFirebaseMessageService : FirebaseMessagingService() {
 
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
-                "Fetching FCM registration token failed ${task.exception}".log()
                 return@OnCompleteListener
             }
-
             val token = task.result
             "onMessageReceived ${token}".log()
-
-        }
+            }
         )
     }
 

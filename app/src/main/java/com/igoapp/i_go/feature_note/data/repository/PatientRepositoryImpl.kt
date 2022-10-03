@@ -3,7 +3,6 @@ package com.igoapp.i_go.feature_note.data.repository
 import com.igoapp.i_go.feature_note.data.remote.PatientAPI
 import com.igoapp.i_go.feature_note.data.remote.responseDTO.*
 import com.igoapp.i_go.feature_note.domain.repository.PatientRepository
-import dagger.multibindings.IntoMap
 import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Singleton

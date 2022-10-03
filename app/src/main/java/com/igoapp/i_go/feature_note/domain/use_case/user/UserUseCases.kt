@@ -1,6 +1,5 @@
 package com.igoapp.i_go.feature_note.domain.use_case.user
 
-import com.igoapp.i_go.feature_note.domain.use_case.user.*
 import javax.inject.Inject
 
 data class UserUseCases @Inject constructor(

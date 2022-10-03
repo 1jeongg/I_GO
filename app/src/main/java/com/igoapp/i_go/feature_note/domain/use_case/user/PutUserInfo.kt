@@ -1,10 +1,8 @@
 package com.igoapp.i_go.feature_note.domain.use_case.user
 
 import com.igoapp.i_go.feature_note.data.remote.requestDTO.UserDTO
-import com.igoapp.i_go.feature_note.data.remote.responseDTO.UserResponseDTO
 import com.igoapp.i_go.feature_note.domain.repository.UserRepository
 import com.igoapp.i_go.feature_note.domain.util.Resource
-import com.igoapp.i_go.feature_note.domain.util.log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
@@ -19,16 +17,9 @@ class PutUserInfo @Inject constructor(
             emit(Resource.Loading())
             val r = repository.putUserInfo(doctor_id, userDTO)
             when(r.code()) {
-                200 -> {
-                    emit(Resource.Success(r.body()!!))
-                    "의료진 성공: ${r.body()}".log()
-                }
-                else -> {
-                    emit(Resource.Error(("의료진 실패ㅠ")))
-                    "usecase ERROR ${r.code()}: ${r.errorBody().toString()}".log()
-                }
+                200 -> emit(Resource.Success(r.body()!!))
+                else -> emit(Resource.Error("Error in Put UserInfo"))
             }
-
         } catch(e: HttpException) {
             emit(Resource.Error(e.localizedMessage ?: "An unexpected error occured"))
         } catch(e: IOException) {

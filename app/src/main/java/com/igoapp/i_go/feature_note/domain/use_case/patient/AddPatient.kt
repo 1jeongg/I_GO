@@ -1,10 +1,8 @@
 package com.igoapp.i_go.feature_note.domain.use_case.patient
 
 import com.igoapp.i_go.feature_note.data.remote.responseDTO.PatientDTO
-import com.igoapp.i_go.feature_note.data.remote.responseDTO.PatientMessageDTO
 import com.igoapp.i_go.feature_note.domain.repository.PatientRepository
 import com.igoapp.i_go.feature_note.domain.util.Resource
-import com.igoapp.i_go.feature_note.domain.util.log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
@@ -19,17 +17,12 @@ class AddPatient @Inject constructor(
             emit(Resource.Loading())
             val r = repository.insertPatient(doctor_id, patientDTO)
             when(r.code()) {
-                201 -> {
-                    "patient add success".log()
-                    emit(Resource.Success(r.body()!!))
-                }
-                else -> r.errorBody().toString().log()
+                201 -> emit(Resource.Success(r.body()!!))
+                else -> emit(Resource.Error("[AddPatient] Error caused."))
             }
         } catch(e: HttpException) {
-            "An unexpected error occured".log()
             emit(Resource.Error(e.localizedMessage ?: "An unexpected error occured"))
         } catch(e: IOException) {
-            "Couldn't reach server. Check your internet connection".log()
             emit(Resource.Error("Couldn't reach server. Check your internet connection."))
         }
     }

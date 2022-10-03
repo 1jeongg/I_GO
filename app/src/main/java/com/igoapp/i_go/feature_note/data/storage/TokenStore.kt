@@ -1,7 +1,6 @@
 package com.igoapp.i_go.feature_note.data.storage
 
 import android.content.Context
-import android.util.Log
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore

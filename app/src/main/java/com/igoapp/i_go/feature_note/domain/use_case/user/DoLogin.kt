@@ -4,7 +4,6 @@ import com.igoapp.i_go.feature_note.data.remote.requestDTO.LoginPasswordDTO
 import com.igoapp.i_go.feature_note.domain.model.Token
 import com.igoapp.i_go.feature_note.domain.repository.UserRepository
 import com.igoapp.i_go.feature_note.domain.util.Resource
-import com.igoapp.i_go.feature_note.domain.util.log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.io.IOException
@@ -18,14 +17,8 @@ class DoLogin @Inject constructor(
             emit(Resource.Loading())
             val r = repository.doLogin(loginPasswordDTO)
             when(r.code()) {
-                200 -> {
-                    "성공".log()
-                    emit(Resource.Success(r.body()!!))
-                }
-                else -> {
-                    emit(Resource.Error("login failed"))
-                    "usecase ERROR ${r.code()}: ${r.errorBody().toString()}".log()
-                }
+                200 -> emit(Resource.Success(r.body()!!))
+                else -> emit(Resource.Error("로그인 실패"))
             }
 
         } catch(e: IOException) {

@@ -1,7 +1,5 @@
 package com.igoapp.i_go.feature_note.data.remote.responseDTO
 
-import com.igoapp.i_go.R
-
 data class PatientDTO(
     val name: String? = null,
     val gender: Boolean? = null,

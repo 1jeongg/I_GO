@@ -2,7 +2,6 @@ package com.igoapp.i_go.feature_note.domain.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.igoapp.i_go.R
 
 @Entity
 data class Notification(
