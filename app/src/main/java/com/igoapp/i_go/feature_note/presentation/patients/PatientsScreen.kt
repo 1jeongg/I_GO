@@ -102,6 +102,7 @@ fun PatientsScreen(
     val openDialog = remember { mutableStateOf(false) }
     var patientId by remember { mutableStateOf(1) }
     var patientName by remember { mutableStateOf("") }
+    var patient_address by remember { mutableStateOf("")}
 
 
     LaunchedEffect(key1 = true){
@@ -205,6 +206,11 @@ fun PatientsScreen(
                                         patient_id = patientId,
                                     )
                                     openDialog.value = false
+                                    try {
+                                        OpenUrl("http://$patient_address/gpio/1")
+                                        "http://$patient_address/gpio/1".log()
+                                    } catch(e: Exception){
+                                    }
 
                                 },
                                 colors = ButtonDefaults.buttonColors(backgroundColor = call_color)
@@ -272,10 +278,7 @@ fun PatientsScreen(
                                 openDialog.value = true
                                 patientId = it.id!!
                                 patientName = it.name
-                                try {
-                                    OpenUrl("http://" + it.ip_address!! + "/gpio/1")
-                                } catch(e: Exception){
-                                }
+                                patient_address = it.ip_address!!
                             }
                         )
                     }
