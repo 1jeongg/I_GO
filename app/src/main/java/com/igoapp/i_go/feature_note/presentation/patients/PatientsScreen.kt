@@ -42,7 +42,9 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
+import java.io.IOException
 import java.io.InputStreamReader
+import java.lang.Error
 import java.net.HttpURLConnection
 import java.net.URL
 import kotlin.concurrent.thread
@@ -207,9 +209,9 @@ fun PatientsScreen(
                                     )
                                     openDialog.value = false
                                     try {
-                                        OpenUrl("http://$patient_address/gpio/1")
-                                        "http://$patient_address/gpio/1".log()
+                                        if (patient_address.isNotBlank()) OpenUrl("http://$patient_address/gpio/1")
                                     } catch(e: Exception){
+                                        "error 발생".log()
                                     }
 
                                 },
